@@ -2,14 +2,22 @@
 
 const body = document.querySelector('body');
 
+document.addEventListener('contextmenu', (event1) => {
+  event1.preventDefault();
+});
+
 const promise1 = new Promise((resolve, reject) => {
+  // eslint-disable-next-line prefer-const
+  let timeoutId;
+
   document.addEventListener('mousedown', (ev) => {
     if (ev.button === 0) {
+      clearTimeout(timeoutId);
       resolve('First promise was resolved');
     }
   });
 
-  setTimeout(() => {
+  timeoutId = setTimeout(() => {
     // eslint-disable-next-line prefer-promise-reject-errors
     reject('First promise was rejected');
   }, 3000);
@@ -17,10 +25,6 @@ const promise1 = new Promise((resolve, reject) => {
 
 const promise2 = new Promise((resolve) => {
   document.addEventListener('mousedown', (ev) => {
-    document.addEventListener('contextmenu', (event1) => {
-      event1.preventDefault();
-    });
-
     if (ev.button === 0 || ev.button === 2) {
       resolve('Second promise was resolved');
     }

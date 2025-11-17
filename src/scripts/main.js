@@ -10,14 +10,18 @@ const promise1 = new Promise((resolve, reject) => {
   // eslint-disable-next-line prefer-const
   let timeoutId;
 
-  document.addEventListener('mousedown', (ev) => {
+  function onMouseDown(ev) {
     if (ev.button === 0) {
       clearTimeout(timeoutId);
+      removeEventListener('mousedown', onMouseDown);
       resolve('First promise was resolved');
     }
-  });
+  }
+
+  document.addEventListener('mousedown', onMouseDown);
 
   timeoutId = setTimeout(() => {
+    removeEventListener('mousedown', onMouseDown);
     // eslint-disable-next-line prefer-promise-reject-errors
     reject('First promise was rejected');
   }, 3000);
